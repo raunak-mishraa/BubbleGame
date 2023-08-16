@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Borel&family=Bricolage+Grotesque:opsz,wght@10..48,500&family=Montserrat:wght@500;800;900&family=Roboto:wght@900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Borel', cursive;
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%
+        }
+
+        .main {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(155, 155, 184);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pannel {
+            width: 80%;
+            height: 80%;
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ptop {
+            width: 100%;
+            color: #fff;
+            min-height: 100px;
+            background-color: rgb(49, 0, 113);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30%;
+        }
+
+        .elem {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .box {
+            font-size: 25px;
+            color: rgb(0, 9, 113);
+            padding: 10px 20px;
+            font-weight: 700;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+
+        .pbtm {
+            background-color: #ffffff;
+            height: calc(100% - 100px);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            overflow: hidden;
+            gap: 10px;
+        }
+
+        .bubble {
+            background-color: #6f00ff;
+            width: 20px;
+            height: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 50%;
+        }
+
+        .bubble:hover {
+            background-color: rgb(0, 5, 32);
+        }
+        #print{
+            opacity: 0;
+        }
+        @media (max-width:450px) {
+            .box{
+                padding: 4px 8px;
+            }
+            h3{
+                font-size: 18px;
+            }
+            .ptop{
+                flex-direction: column;
+                gap: 12px;
+                padding:12px ;
+            }
+            .elem{
+                display: flex;
+                margin:0 12px 12px 12;
+                justify-content: space-around;
+            }
+            .pannel{
+                width: 95%;
+                height: 95%;
+            }
+            .pbtm{
+                overflow: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="pannel">
+            <div class="ptop">
+                <div class="elem">
+                    <h3>Hit</h3>
+                    <div id="js-hit" class="box">2</div>
+                </div>
+                <div class="elem">
+                    <h3>Timer</h3>
+                    <div id="js-timer" class="box">10</div>
+                </div>
+                <div class="elem">
+                    <h3>Score</h3>
+                    <div id="js-score" class="box">0</div>
+                </div>
+            </div>
+            <div class="pbtm">
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+        integrity="sha512-Ic9xkERjyZ1xgJ5svx3y0u3xrvfT/uPkV99LBwe68xjy/mGtO+4eURHZBW2xW4SZbFrF1Tf090XqB+EVgXnVjw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let hit = 0;
+        let time_val = 10;
+        let score = 0;
+        function makingBubble() {
+            let bubble = document.querySelector('.pbtm');
+            let store = '';
+            for (let i = 1; i <= 84; i++) {
+                store += ` <div class="bubble">${Math.floor(Math.random() * 10)}</div>`;
+            }
+            bubble.innerHTML = store;
+        }
+        function hitValue() {
+            hit = Math.floor(Math.random() * 10);
+            document.querySelector('#js-hit').textContent = hit;
+        }
+        function resetTimer() {
+            time_val = 10;
+        }
+        function timerValue() {
+            let clear = setInterval(() => {
+                if (time_val > 0) {
+                    time_val--;
+                    document.querySelector('#js-timer').textContent = time_val;
+                }
+                else {
+                    clearInterval(clear);
+                    // document.querySelector('.pbtm').innerHTML = `<h1 id='print'>Game Over</h1>`;
+                    Anime();
+                }
+            }, 1000)
+        }
+
+        function scoreValue() {
+            score += 10;
+            document.querySelector('#js-score').textContent = score;
+        }
+        hitValue();
+        makingBubble();
+        timerValue();
+        function Anime() {
+            gsap.to(".bubble", {
+                duration: 1,
+                scale: 0,
+                y: 40,
+                ease: "power1.inOut",
+                stagger: {
+                    grid: [7, 15],
+                    from: "random",
+                    axis: "x",
+                    amount: 1.5
+                }
+            });
+        }
+        document.querySelector('.pbtm').addEventListener('click', () => {
+            let elem = Number(event.target.textContent);
+            if (elem === hit) {
+                scoreValue();
+                resetTimer();
+                hitValue();
+                makingBubble();
+
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
